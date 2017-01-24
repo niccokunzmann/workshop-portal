@@ -16,7 +16,16 @@ end
 module ApplicationHelper
   def menu_items
     (menu_item t(:events, scope: 'navbar'), events_path) +
-    (menu_item t(:requests, scope: 'navbar'), requests_path)
+    request_menu_item
+  end
+
+  def request_menu_item
+    if can? :index, Request
+      item = (menu_item t(:requests, scope: 'navbar'), requests_path)
+    else
+      item = (menu_item t(:new_request, scope: 'navbar'), new_request_path)
+    end
+    item
   end
 
   # Render the given string as markdown
@@ -49,9 +58,7 @@ module ApplicationHelper
     # everyone gets settings
     o << (menu_item t(:settings, scope: 'navbar'), edit_user_registration_path)
     # everyone gets their profile, if it exists
-    if current_user.profile.present?
-      o << (menu_item t(:profile, scope: 'navbar'), profile_path(current_user.profile))
-    else
+    unless current_user.profile.present?
       o << (menu_item t(:create_profile, scope: 'navbar'), new_profile_path)
     end
     # pupils get their applications
@@ -59,8 +66,8 @@ module ApplicationHelper
       o << (menu_item t(:my_application_letters, scope: 'navbar'), application_letters_path)
     end
     # admins get user management
-    if current_user.role == "admin"
-      o << (menu_item t(:user_management, scope: 'navbar'), profiles_path)
+    if current_user.role == "admin" || current_user.role == "organizer"
+      o << (menu_item t(:user_management, scope: 'navbar'), users_path)
     end
     # everyone gets logout
     o << (menu_item t(:logout, scope: 'navbar'), destroy_user_session_path, :method => :delete)

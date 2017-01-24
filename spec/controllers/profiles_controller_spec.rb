@@ -38,13 +38,6 @@ RSpec.describe ProfilesController, type: :controller do
       sign_in @profile.user
     end
 
-    describe "GET #index" do
-      it "assigns all profiles as @profiles" do
-        get :index, params: {}, session: valid_session
-        expect(assigns(:profiles)).to eq([@profile])
-      end
-    end
-
     describe "GET #show" do
       it "assigns the requested profile as @profile" do
         get :show, id: @profile.to_param, session: valid_session
@@ -113,19 +106,6 @@ RSpec.describe ProfilesController, type: :controller do
         end
       end
     end
-
-    describe "DELETE #destroy" do
-      it "destroys the requested profile" do
-        expect {
-          delete :destroy, id: @profile.to_param, session: valid_session
-        }.to change(Profile, :count).by(-1)
-      end
-
-      it "redirects to the profiles list" do
-        delete :destroy, id: @profile.to_param, session: valid_session
-        expect(response).to redirect_to(profiles_url)
-      end
-    end
   end
   
   describe "POST #create" do
@@ -135,6 +115,21 @@ RSpec.describe ProfilesController, type: :controller do
         expect {
           post :create, profile: valid_attributes, session: valid_session
         }.to change(Profile, :count).by(1)
+      end
+
+      it "doesn't create two Profiles" do
+        sign_in FactoryGirl.create(:user)
+        expect {
+          post :create, profile: valid_attributes, session: valid_session
+        }.to change(Profile, :count).by(1)
+
+        expect {
+          post :create, profile: valid_attributes, session: valid_session
+        }.to_not change(Profile, :count)
+        expect(response).to redirect_to(Profile.last)
+
+        get :new, profile: valid_attributes, session: valid_session
+        expect(response).to redirect_to(Profile.last)
       end
 
       it "assigns a newly created profile as @profile" do
@@ -147,7 +142,7 @@ RSpec.describe ProfilesController, type: :controller do
       it "redirects to the created profile" do
         sign_in FactoryGirl.create(:user)
         post :create, profile: valid_attributes, session: valid_session
-        expect(response).to redirect_to(Profile.last)
+        expect(response).to redirect_to(edit_user_registration_path)
       end
     end
 

@@ -13,12 +13,9 @@
  *= require bootstrap-datepicker
  *= require_tree .
  *= require_self
+ *= require bootstrap_and_overrides
  */
 
- /*
-  *= require bootstrap_and_overrides
-  */
- 
 label.required:after {
     content:" *";
     color: red
@@ -51,6 +48,4 @@ footer {
         margin-bottom: 15px;
     }
 }
-
-
 

@@ -42,6 +42,8 @@ gem 'devise_openid_authenticatable'
 # https://github.com/seyhunak/twitter-bootstrap-rails#using-helpers
 gem "therubyracer"
 #gem 'less-rails-bootstrap'
+# less-rails requires an older sprockets
+gem "sprockets", '3.6.3'
 gem "less-rails"
 gem 'twitter-bootstrap-rails'
 gem 'ref'
@@ -79,6 +81,7 @@ gem 'rubocop', '~> 0.29.1'
 # See https://github.com/plataformatec/simple_form
 # gem 'simple_form'
 
+
 # coveralls.io
 gem 'coveralls', require: false
 
@@ -99,8 +102,12 @@ gem 'figaro'
 # Allow ORM functionality in plain ruby models
 gem 'active_attr'
 
+#to only display a limited number of items on an index page
+gem 'will_paginate-bootstrap'
+
 # Markdown renderer
 gem 'redcarpet'
+
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -149,7 +156,7 @@ group :test do
   gem 'parser', '~> 2.2.2.5'
   # Stubbing external calls by blocking traffic with WebMock.disable_net_connect! or allow:
   # gem 'webmock'
-  
+
 end
 
 
