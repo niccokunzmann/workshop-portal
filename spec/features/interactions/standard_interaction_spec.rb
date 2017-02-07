@@ -41,6 +41,15 @@ RSpec::Steps.steps "Demo" do
     fill_in 'event_knowledge_level', with: 'Fortgeschrittene'
     fill_in 'event_application_deadline', with: I18n.l(Date.new(2019, 01, 12))
     #TODO: Add custom variable application fields
+    click_link I18n.t('events.form.add_field')
+    within page.find("#custom-application-fields").all(".input-group")[0] do
+      fill_in "event[custom_application_fields][]", with: 'Klassenstufe'
+    end
+    click_link I18n.t('events.form.add_field')
+    within page.find("#custom-application-fields").all(".input-group")[1] do
+      fill_in "event[custom_application_fields][]", with: 'Programmiersprachenkenntnisse'
+    end
+
     click_button 'create_event'
     expect(page).to_not have_text I18n.t('errors.form_invalid.one')
     expect(page).to_not have_text I18n.t('errors.form_invalid.other')
